@@ -11,7 +11,7 @@
 * Nome do médico com no máximo 120 caractÃ©res
 * CRM: somente números com no máximo 7 caracteres
 * Telefone fixo: somente números
-* Telefone celular: somente nÃºmeros
+* Telefone celular: somente números
 * CEP: somente números (Ao cadastrar o CEP, deve ser feita uma requisição via XHR para a API dos correios e retornar todos os dados de endereço do cliente).
 * Especialidade médica (máximo de duas especialidades)
 
