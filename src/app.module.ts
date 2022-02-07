@@ -4,14 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnderecoModule } from './endereco/endereco.module';
 import { Endereco } from './endereco/entities/endereco.entity';
 import { EspecialidadeModule } from './especialidade/especialidade.module';
-import { Usuario } from './usuario/entities/usuario.entity';
-import { UsuarioModule } from './usuario/usuario.module';
+import { Medico } from './medico/entities/medico.entity';
+import { MedicoModule } from './medico/medico.module';
 
 @Module({
   imports: [
     EspecialidadeModule,
     EnderecoModule,
-    UsuarioModule,
+    MedicoModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -20,10 +20,11 @@ import { UsuarioModule } from './usuario/usuario.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Usuario, Endereco, EspecialidadeModule],
+      entities: [Medico, Endereco, EspecialidadeModule],
       synchronize: false,
       autoLoadEntities: true,
     }),
+    MedicoModule,
   ],
   controllers: [],
   providers: [],
