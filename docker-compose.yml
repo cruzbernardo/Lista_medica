@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - /c/ProgramirNode/aprendendo-nest/var/lib/postgresql/data
