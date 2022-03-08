@@ -1,4 +1,4 @@
-import { Medico } from 'src/medico/entities/medico.entity';
+import { Medico } from '../../medico/entities/medico.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -13,7 +13,7 @@ export class Endereco {
   id: number;
 
   @Column()
-  cep: string;
+  cep: number;
 
   @Column()
   logradouro: string;
@@ -22,7 +22,7 @@ export class Endereco {
   complemento: string;
 
   @Column()
-  numero: string;
+  numero: number;
 
   @Column()
   bairro: string;
@@ -30,9 +30,10 @@ export class Endereco {
   @Column()
   estado: string;
 
-  @OneToOne(() => Medico, (medico) => medico.endereco, {
-    onDelete: 'CASCADE',
+  @OneToOne(() => Medico, (medico) => medico.endereco)
+  @JoinColumn({
+    name: 'medico_id',
+    referencedColumnName: 'id',
   })
-  @JoinColumn()
   medico: Medico;
 }

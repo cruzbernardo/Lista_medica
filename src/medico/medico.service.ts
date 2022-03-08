@@ -1,26 +1,64 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Endereco } from 'src/endereco/entities/endereco.entity';
+import { Especialidade } from 'src/especialidade/entities/especialidade.entity';
+import { Repository } from 'typeorm';
 import { CreateMedicoDto } from './dto/create-medico.dto';
 import { UpdateMedicoDto } from './dto/update-medico.dto';
+import { Medico } from './entities/medico.entity';
 
 @Injectable()
 export class MedicoService {
-  create(createMedicoDto: CreateMedicoDto) {
-    return 'This action adds a new medico';
+  @InjectRepository(Medico)
+  private readonly medicoRepository: Repository<Medico>;
+  @InjectRepository(Especialidade)
+  private readonly especialidadeRepository: Repository<Especialidade>;
+  @InjectRepository(Endereco)
+  private readonly enderecoRespoistoy: Repository<Endereco>;
+
+  async create({ endereco, ...medicoDto }: CreateMedicoDto): Promise<Medico> {
+    const medico = this.medicoRepository.create(medicoDto);
+    const enderecoDto = await this.enderecoRespoistoy.save(endereco);
+    medico.endereco = enderecoDto;
+    return await this.medicoRepository.save(medico);
   }
 
-  findAll() {
-    return `This action returns all medico`;
+  async findAll(): Promise<Medico[]> {
+    return await this.medicoRepository.find({
+      relations: ['especialidades'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} medico`;
+  async findOne(id: number): Promise<Medico> {
+    return await this.medicoRepository.findOne({
+      relations: ['especialidades'],
+      where: { id: id },
+    });
   }
 
-  update(id: number, updateMedicoDto: UpdateMedicoDto) {
-    return `This action updates a #${id} medico`;
+  async update(id: number, updateMedicoDto: UpdateMedicoDto): Promise<Medico> {
+    const medico = await this.findOne(id);
+    const medicoAt = this.medicoRepository.create(updateMedicoDto);
+    const medicoAtualizado: Medico = {
+      ...medico,
+      ...medicoAt,
+    };
+
+    return this.medicoRepository.save(medicoAtualizado);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} medico`;
+  async remove(id: number): Promise<void> {
+    const medico = await this.findOne(id);
+    const enderecoRemovido = await this.enderecoRespoistoy.softDelete(
+      medico.endereco.id,
+    );
+    const especialidade = await Promise.all(
+      medico.especialidade.map(
+        async (especialidade) =>
+          await this.especialidadeRepository.softDelete(especialidade),
+      ),
+    );
+    const medicoRemovido = await this.medicoRepository.softDelete(medico);
+    return;
   }
 }

@@ -1,5 +1,5 @@
-import { Endereco } from 'src/endereco/entities/endereco.entity';
-import { Especialidade } from 'src/especialidade/entities/especialidade.entity';
+import { Endereco } from '../../endereco/entities/endereco.entity';
+import { Especialidade } from '../../especialidade/entities/especialidade.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -28,6 +28,8 @@ export class Medico {
   @OneToOne(() => Endereco, (endereco) => endereco.medico)
   endereco: Endereco;
 
-  @OneToMany(() => Especialidade, (especialidade) => especialidade.medico)
+  @OneToMany(() => Especialidade, (especialidade) => especialidade.medico, {
+    nullable: false,
+  })
   especialidade: Especialidade[];
 }

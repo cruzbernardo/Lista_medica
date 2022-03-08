@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EnderecoService } from './endereco.service';
 import { CreateEnderecoDto } from './dto/create-endereco.dto';
 import { UpdateEnderecoDto } from './dto/update-endereco.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('endereco')
+@ApiTags('Endereco')
 export class EnderecoController {
   constructor(private readonly enderecoService: EnderecoService) {}
 
